@@ -1,4 +1,6 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWQd79oa6sW2Tfwq1nIUwPkP_9zxQKRjetwdOrV1YQ1v5aPacbdTGajtKl6c3u1RJ23A/exec";
+// CORS cheklovini chetlab o'tish uchun proxy ishlatamiz
+const CORS_PROXY = "https://corsproxy.io/?";
 
 let currentUser = null;
 
@@ -24,8 +26,8 @@ if (loginForm) {
     const password = document.getElementById("password").value.trim();
 
     try {
-      const url = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
-      const response = await fetch(url, { method: "GET", redirect: "follow" });
+      const targetUrl = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+      const response = await fetch(CORS_PROXY + encodeURIComponent(targetUrl));
       const text = await response.text();
       
       let data;
@@ -110,8 +112,8 @@ document.getElementById("taminotchiForm")?.addEventListener("submit", async (e) 
 
 async function sendReport(payload, formElement) {
   try {
-    const url = `${SCRIPT_URL}?action=${payload.action}&${new URLSearchParams(payload).toString()}`;
-    const response = await fetch(url, { method: "GET", redirect: "follow" });
+    const targetUrl = `${SCRIPT_URL}?action=${payload.action}&${new URLSearchParams(payload).toString()}`;
+    const response = await fetch(CORS_PROXY + encodeURIComponent(targetUrl));
     const text = await response.text();
     const result = JSON.parse(text);
     alert(result.message || "Muvaffaqiyatli saqlandi!");
