@@ -4,108 +4,93 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Yo'l Qurilish Hisoboti</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; }
-    .container { max-width: 450px; background: white; padding: 20px; border-radius: 12px; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    h2, h3 { text-align: center; color: #1e293b; }
-    label { display: block; margin-top: 10px; font-weight: bold; font-size: 14px; color: #475569; }
-    input, textarea, button { width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: 1px solid #cbd5e1; box-sizing: border-box; }
-    button { background: #0284c7; color: white; border: none; font-weight: bold; margin-top: 15px; cursor: pointer; }
-    button:hover { background: #0369a1; }
-    .hidden { display: none; }
-    .error { color: #dc2626; font-size: 14px; text-align: center; margin-top: 10px; }
-    .logout-btn { background: #ef4444; margin-top: 20px; }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
 
-<div class="container">
-  
-  <!-- LOGIN QISMI -->
-  <div id="loginSection">
-    <h2>Yo'l Qurilish Hisoboti</h2>
-    <form id="loginForm">
-      <label>Login</label>
-      <input type="text" id="username" required>
-      
-      <label>Parol</label>
-      <input type="password" id="password" required>
-      
-      <button type="submit">Kirish</button>
-      <div id="loginError" class="error hidden"></div>
-    </form>
+  <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-lg">
+    
+    <!-- LOGIN -->
+    <div id="loginSection">
+      <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Yo'l Qurilish Tizimi</h2>
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Login</label>
+          <input type="text" id="username" required class="w-full mt-1 p-2 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Parol</label>
+          <input type="password" id="password" required class="w-full mt-1 p-2 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition">Kirish</button>
+      </form>
+      <p id="loginError" class="text-red-500 text-sm mt-3 text-center hidden"></p>
+    </div>
+
+    <!-- ASOSIY ILOVA -->
+    <div id="appSection" class="hidden">
+      <div class="flex justify-between items-center mb-6 border-b pb-3">
+        <span id="userGreeting" class="font-semibold text-gray-700 text-lg"></span>
+        <button id="logoutBtn" class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600">Chiqish</button>
+      </div>
+
+      <!-- RAHBAR PANELI -->
+      <div id="rahbarFormContainer" class="hidden space-y-4">
+        <h3 class="text-lg font-bold text-blue-800">Rahbar Paneli</h3>
+        <p class="text-sm text-gray-600">Barcha xodimlar va obyektdagi hisobotlarni nazorat qilish.</p>
+      </div>
+
+      <!-- PRORAB FORMASI -->
+      <div id="prorabFormContainer" class="hidden">
+        <h3 class="text-lg font-bold text-blue-800 mb-3">Prorab Hisoboti</h3>
+        <form id="prorabForm" class="space-y-3">
+          <input type="text" id="prorabFish" placeholder="F.I.Sh" required class="w-full p-2 border rounded text-sm">
+          <input type="text" id="obyekt" placeholder="Obyekt nomi" required class="w-full p-2 border rounded text-sm">
+          <textarea id="bajarilganIsh" placeholder="Bajarilgan ishlar" class="w-full p-2 border rounded text-sm"></textarea>
+          <input type="number" id="ishchilarSoni" placeholder="Ishchilar soni" class="w-full p-2 border rounded text-sm">
+          <input type="text" id="ishlatilganTexnika" placeholder="Ishlatilgan texnika" class="w-full p-2 border rounded text-sm">
+          <input type="number" id="motochasat" placeholder="Motochasat" class="w-full p-2 border rounded text-sm">
+          <input type="number" id="yoqilgiPr" placeholder="Yoqilg'i (litr)" class="w-full p-2 border rounded text-sm">
+          <input type="number" id="berilganPulPr" placeholder="Berilgan pul" class="w-full p-2 border rounded text-sm">
+          <input type="number" id="harajatSummasiPr" placeholder="Xarajat summasi" class="w-full p-2 border rounded text-sm">
+          <input type="text" id="remontIzoxiPr" placeholder="Remont izohi" class="w-full p-2 border rounded text-sm">
+          <button type="submit" class="w-full bg-green-600 text-white py-2 rounded font-bold hover:bg-green-700">Yuborish</button>
+        </form>
+      </div>
+
+      <!-- SHAFYOR FORMASI -->
+      <div id="shafyorFormContainer" class="hidden">
+        <h3 class="text-lg font-bold text-blue-800 mb-3">Shafyor Hisoboti</h3>
+        <form id="shafyorForm" class="space-y-3">
+          <input type="text" id="shafyorFish" placeholder="F.I.Sh" required class="w-full p-2 border rounded text-sm">
+          <input type="text" id="mashina" placeholder="Mashina raqami / turi" required class="w-full p-2 border rounded text-sm">
+          <input type="text" id="borganManzil" placeholder="Borgan manzil" class="w-full p-2 border rounded text-sm">
+          <input type="number" id="masofaKm" placeholder="Masofa (km)" class="w-full p-2 border rounded text-sm">
+          <input type="number" id="reysSoni" placeholder="Reys soni" class="w-full p-2 border rounded text-sm">
+          <input type="number" id="remontSummasiSh" placeholder="Remont summasi" class="w-full p-2 border rounded text-sm">
+          <input type="text" id="remontIzoxiSh" placeholder="Remont izohi" class="w-full p-2 border rounded text-sm">
+          <button type="submit" class="w-full bg-green-600 text-white py-2 rounded font-bold hover:bg-green-700">Yuborish</button>
+        </form>
+      </div>
+
+      <!-- TAMINOTCHI FORMASI -->
+      <div id="taminotchiFormContainer" class="hidden">
+        <h3 class="text-lg font-bold text-blue-800 mb-3">Ta'minotchi Hisoboti</h3>
+        <form id="taminotchiForm" class="space-y-3">
+          <input type="text" id="taminotchiFish" placeholder="F.I.Sh" required class="w-full p-2 border rounded text-sm">
+          <input type="number" id="berilganPulTam" placeholder="Berilgan pul" class="w-full p-2 border rounded text-sm">
+          <input type="text" id="xarajatTuri" placeholder="Xarajat turi" class="w-full p-2 border rounded text-sm">
+          <input type="text" id="mashinaObyekt" placeholder="Mashina / Obyekt" class="w-full p-2 border rounded text-sm">
+          <input type="number" id="xarajatSummasiTam" placeholder="Xarajat summasi" class="w-full p-2 border rounded text-sm">
+          <input type="text" id="chekRasmi" placeholder="Chek rasmi (havola)" class="w-full p-2 border rounded text-sm">
+          <button type="submit" class="w-full bg-green-600 text-white py-2 rounded font-bold hover:bg-green-700">Yuborish</button>
+        </form>
+      </div>
+
+    </div>
+
   </div>
 
-  <!-- ASOSIY APPLIKATSIYA QISMI -->
-  <div id="appSection" class="hidden">
-    <h3 id="userGreeting"></h3>
-
-    <!-- RAHBAR FORMASI -->
-    <div id="rahbarFormContainer" class="hidden">
-      <h3>Moliya va Pul Ajratish</h3>
-      <form id="rahbarForm">
-        <label>Qabul qiluvchi xodim (Login / Ismi):</label>
-        <input type="text" id="recipientUser" placeholder="masalan: zavxoz, prorab..." required>
-
-        <label>Yuborilayotgan summa (so'm):</label>
-        <input type="number" id="sendAmount" placeholder="masalan: 5000000" required>
-
-        <label>Maqsadi / Izoh:</label>
-        <textarea id="sendNote" placeholder="Yo'l ta'mirlash ishlariga..."></textarea>
-
-        <button type="submit">Pulni Yuborish</button>
-      </form>
-    </div>
-
-    <!-- PRORAB FORMASI -->
-    <div id="prorabFormContainer" class="hidden">
-      <h3>Prorab Hisoboti</h3>
-      <form id="prorabForm">
-        <label>Bajarilgan ishlar:</label>
-        <textarea id="prorabWork" required></textarea>
-        <label>Xarajatlar (so'm):</label>
-        <input type="number" id="prorabExpenses">
-        <label>Xarajat izohi:</label>
-        <input type="text" id="prorabExpenseNote">
-        <label>Ishchilar davomati:</label>
-        <input type="text" id="prorabAttendance">
-        <button type="submit">Hisobotni saqlash</button>
-      </form>
-    </div>
-
-    <!-- SHAFYOR FORMASI -->
-    <div id="shafyorFormContainer" class="hidden">
-      <h3>Shafyor Hisoboti</h3>
-      <form id="shafyorForm">
-        <label>Moshina raqami / Rusumi:</label>
-        <input type="text" id="shafyorVehicle" required>
-        <label>Bosilgan masofa (km):</label>
-        <input type="number" id="shafyorMileage">
-        <label>Qatnovlar soni (Reys):</label>
-        <input type="number" id="shafyorTrips">
-        <label>Ta'mir xarajati (so'm):</label>
-        <input type="number" id="shafyorRepairCost">
-        <button type="submit">Hisobotni saqlash</button>
-      </form>
-    </div>
-
-    <!-- TAMINOTCHI (ZAVXOZ) FORMASI -->
-    <div id="taminotchiFormContainer" class="hidden">
-      <h3>Ta'minotchi / Zavxoz Hisoboti</h3>
-      <form id="taminotchiForm">
-        <label>Oziq-ovqat xarajati (so'm):</label>
-        <input type="number" id="taminotchiFood">
-        <label>Yonilg'i xarajatlari izohi:</label>
-        <textarea id="taminotchiFuel"></textarea>
-        <button type="submit">Hisobotni saqlash</button>
-      </form>
-    </div>
-
-    <button id="logoutBtn" class="logout-btn">Chiqish</button>
-  </div>
-
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
