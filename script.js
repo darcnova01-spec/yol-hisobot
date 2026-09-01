@@ -1,5 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWQd79oa6sW2Tfwq1nIUwPkP_9zxQKRjetwdOrV1YQ1v5aPacbdTGajtKl6c3u1RJ23A/exec";
-// CORS cheklovini chetlab o'tish uchun proxy ishlatamiz
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1zRjPMHLtXTOy7RHIznBiPAFRpSV_VdDX1leb_rkxikVO4yikzOaNPSGzTwhjrUTf/exec";
 const CORS_PROXY = "https://corsproxy.io/?";
 
 let currentUser = null;
