@@ -25,7 +25,7 @@ if (loginForm) {
 
     try {
       const url = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
-      const response = await fetch(url);
+      const response = await fetch(url, { method: "GET", redirect: "follow" });
       const text = await response.text();
       
       let data;
@@ -110,15 +110,14 @@ document.getElementById("taminotchiForm")?.addEventListener("submit", async (e) 
 
 async function sendReport(payload, formElement) {
   try {
-    const response = await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
-    const result = await response.json();
+    const url = `${SCRIPT_URL}?action=${payload.action}&${new URLSearchParams(payload).toString()}`;
+    const response = await fetch(url, { method: "GET", redirect: "follow" });
+    const text = await response.text();
+    const result = JSON.parse(text);
     alert(result.message || "Muvaffaqiyatli saqlandi!");
     formElement.reset();
   } catch (err) {
-    alert("Xatolik yuz berdi!");
+    alert("Saqlashda xatolik yuz berdi!");
   }
 }
 
