@@ -1,5 +1,5 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1zRjPMHLtXTOy7RHIznBiPAFRpSV_VdDX1leb_rkxikVO4yikzOaNPSGzTwhjrUTf/exec";
-const CORS_PROXY = "https://corsproxy.io/?";
+const CORS_PROXY = "https://api.allorigins.win/raw?url=";
 
 let currentUser = null;
 
