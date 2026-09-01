@@ -1,5 +1,5 @@
 // Google Apps Script Web App URL
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyxsRjmaxeQkuM3S4cWdlQ45DLLNQ7_hgtxJpeFN5I9ZQVAx2PY9gC96B20pkFRKZgJQ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWQd79oa6sW2Tfwq1nIUwPkP_9zxQKRjetwdOrV1YQ1v5aPacbdTGajtKl6c3u1RJ23A/exec";
 
 let currentUser = null;
 
