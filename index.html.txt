@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yo'l Qurilish Hisoboti</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f4f6f9; color: #333; padding: 15px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 480px; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        h2 { text-align: center; color: #1a2a3a; margin-bottom: 20px; font-size: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; color: #4a5568; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 15px; background: #fff; }
+        input:focus, select:focus, textarea:focus { border-color: #3182ce; outline: none; }
+        button { width: 100%; padding: 14px; background-color: #3182ce; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        button:active { background-color: #2b6cb0; }
+        .hidden { display: none; }
+        .row-group { border: 1px dashed #cbd5e0; padding: 10px; border-radius: 8px; margin-bottom: 10px; background: #f7fafc; }
+        .add-btn { background: #38a169; margin-bottom: 15px; }
+        .status-msg { text-align: center; margin-top: 15px; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Yo'l Qurilish Hisoboti</h2>
+
+    <!-- LOGIN FORM -->
+    <div id="login-section">
+        <div class="form-group">
+            <label for="username">Login</label>
+            <input type="text" id="username" placeholder="Loginni kiriting">
+        </div>
+        <div class="form-group">
+            <label for="password">Parol</label>
+            <input type="password" id="password" placeholder="Parolni kiriting">
+        </div>
+        <button onclick="login()">Kirish</button>
+    </div>
+
+    <!-- MAIN REPORT FORM -->
+    <div id="report-section" class="hidden">
+        <p id="user-info" style="margin-bottom: 15px; font-weight: bold; color: #2b6cb0;"></p>
+
+        <!-- PRORAB FORM -->
+        <form id="prorab-form" class="role-form hidden">
+            <div class="form-group">
+                <label>Bajarilgan ish hajmi</label>
+                <input type="text" name="workDone" placeholder="Masalan: 500 m2 asfalt yotqizildi" required>
+            </div>
+            <div class="form-group">
+                <label>Xarajatlar (so'm)</label>
+                <input type="number" name="expenses" placeholder="Chiqim summasi">
+            </div>
+            <div class="form-group">
+                <label>Xarajat izohi</label>
+                <input type="text" name="expenseNote" placeholder="Nima uchun ishlatildi">
+            </div>
+            <div class="form-group">
+                <label>Ishchilar soni va davomati</label>
+                <textarea name="attendance" placeholder="Xodimlar va ularning soatlari"></textarea>
+            </div>
+        </form>
+
+        <!-- SHAFYOR FORM -->
+        <form id="shafyor-form" class="role-form hidden">
+            <div class="form-group">
+                <label>Texnika / Mashina rusumi</label>
+                <input type="text" name="vehicle" placeholder="Masalan: Kamaz / Howo / MAZ" required>
+            </div>
+            <div class="form-group">
+                <label>Kunlik masofa (km) / Spidometr</label>
+                <input type="number" name="mileage" placeholder="Masalan: 120" required>
+            </div>
+            <div class="form-group">
+                <label>Qatnovlar soni (Reys)</label>
+                <input type="number" name="trips" placeholder="Reyslar soni">
+            </div>
+            <div class="form-group">
+                <label>Ta'mir xarajatlari (so'm)</label>
+                <input type="number" name="repairCost" placeholder="Ehtiyot qismlar yoki remont summasi">
+            </div>
+        </form>
+
+        <!-- TAMINOTCHI FORM -->
+        <form id="taminotchi-form" class="role-form hidden">
+            <div class="form-group">
+                <label>Oziq-ovqat xarajati (so'm)</label>
+                <input type="number" name="foodExpense" placeholder="Ishchilar ovqatlanishi uchun">
+            </div>
+            
+            <label style="margin-top: 10px; display:block;">Yoqilg'i tarqatish logistikasi</label>
+            <div id="fuel-rows">
+                <div class="row-group">
+                    <input type="text" placeholder="Mashina № / Shafyor" class="fuel-vehicle" style="margin-bottom: 5px;">
+                    <input type="number" placeholder="Yoqilg'i miqdori (Litr)" class="fuel-amount">
+                </div>
+            </div>
+            <button type="button" class="add-btn" onclick="addFuelRow()">+ Yana mashina qo'shish</button>
+        </form>
+
+        <button onclick="submitReport()">Hisobotni Yuborish</button>
+    </div>
+
+    <div id="status" class="status-msg"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
