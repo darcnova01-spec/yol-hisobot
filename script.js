@@ -1,4 +1,3 @@
-// Google Apps Script Web App URL
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWQd79oa6sW2Tfwq1nIUwPkP_9zxQKRjetwdOrV1YQ1v5aPacbdTGajtKl6c3u1RJ23A/exec";
 
 let currentUser = null;
@@ -11,21 +10,12 @@ const loginError = document.getElementById("loginError");
 const userGreeting = document.getElementById("userGreeting");
 const logoutBtn = document.getElementById("logoutBtn");
 
+const rahbarFormContainer = document.getElementById("rahbarFormContainer");
 const prorabFormContainer = document.getElementById("prorabFormContainer");
 const shafyorFormContainer = document.getElementById("shafyorFormContainer");
 const taminotchiFormContainer = document.getElementById("taminotchiFormContainer");
 
-const prorabForm = document.getElementById("prorabForm");
-const shafyorForm = document.getElementById("shafyorForm");
-const taminotchiForm = document.getElementById("taminotchiForm");
-
-const formMessage = document.getElementById("formMessage");
-
-// Fuel entries management
-const addFuelBtn = document.getElementById("addFuelBtn");
-const fuelEntriesContainer = document.getElementById("fuelEntriesContainer");
-
-// Login submit
+// LOGIN TIZIMI
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   loginError.classList.add("hidden");
@@ -39,144 +29,68 @@ loginForm.addEventListener("submit", async (e) => {
 
     if (data.status === "success") {
       currentUser = data.user;
-      showAppScreen();
+      loginSection.classList.add("hidden");
+      appSection.classList.remove("hidden");
+      userGreeting.innerText = `Xush kelibsiz, ${currentUser.username}! (${currentUser.role})`;
+
+      // Barcha formalarni yashirib, mosini ochamiz
+      if (rahbarFormContainer) rahbarFormContainer.classList.add("hidden");
+      if (prorabFormContainer) prorabFormContainer.classList.add("hidden");
+      if (shafyorFormContainer) shafyorFormContainer.classList.add("hidden");
+      if (taminotchiFormContainer) taminotchiFormContainer.classList.add("hidden");
+
+      const role = (currentUser.role || "").toLowerCase();
+
+      if (role.includes("rahbar")) {
+        if (rahbarFormContainer) rahbarFormContainer.classList.remove("hidden");
+      } else if (role.includes("prorab")) {
+        if (prorabFormContainer) prorabFormContainer.classList.remove("hidden");
+      } else if (role.includes("shafyor")) {
+        if (shafyorFormContainer) shafyorFormContainer.classList.remove("hidden");
+      } else if (role.includes("taminotchi") || role.includes("zavkoz")) {
+        if (taminotchiFormContainer) taminotchiFormContainer.classList.remove("hidden");
+      }
     } else {
-      loginError.textContent = data.message || "Login yoki parol noto'g'ri!";
+      loginError.innerText = data.message || "Login yoki parol xato!";
       loginError.classList.remove("hidden");
     }
   } catch (err) {
-    loginError.textContent = "Ulanishda xatolik yuz berdi. Qaytadan urinib ko'ring.";
+    loginError.innerText = "Server bilan ulanishda xatolik!";
     loginError.classList.remove("hidden");
   }
 });
 
-// App ekranini ko'rsatish
-function showAppScreen() {
-  loginSection.classList.add("hidden");
-  appSection.classList.remove("hidden");
+// RAHBAR PUL YUBORISH FORMASI
+const rahbarForm = document.getElementById("rahbarForm");
+if (rahbarForm) {
+  rahbarForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const payload = {
+      action: "sendMoney",
+      user: currentUser.username,
+      role: currentUser.role,
+      recipient: document.getElementById("recipientUser").value.trim(),
+      amount: document.getElementById("sendAmount").value.trim(),
+      note: document.getElementById("sendNote").value.trim()
+    };
 
-  userGreeting.textContent = `${currentUser.username} (${currentUser.role})`;
-
-  prorabFormContainer.classList.add("hidden");
-  shafyorFormContainer.classList.add("hidden");
-  taminotchiFormContainer.classList.add("hidden");
-
-  const role = currentUser.role.toLowerCase();
-
-  if (role.includes("prorab")) {
-    prorabFormContainer.classList.remove("hidden");
-  } else if (role.includes("shafyor")) {
-    shafyorFormContainer.classList.remove("hidden");
-  } else if (role.includes("taminotchi") || role.includes("ta'minotchi")) {
-    taminotchiFormContainer.classList.remove("hidden");
-  }
-}
-
-// Logout
-logoutBtn.addEventListener("click", () => {
-  currentUser = null;
-  appSection.classList.add("hidden");
-  loginSection.classList.remove("hidden");
-  loginForm.reset();
-});
-
-// Helper: Form yuborish
-async function sendReport(reportData) {
-  formMessage.classList.add("hidden");
-  formMessage.className = "message hidden";
-
-  const payload = {
-    user: currentUser.username,
-    role: currentUser.role,
-    report: reportData
-  };
-
-  try {
-    const response = await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
-    const result = await response.json();
-
-    if (result.status === "success") {
-      formMessage.textContent = "Hisobot muvaffaqiyatli yuborildi!";
-      formMessage.classList.add("success");
-      formMessage.classList.remove("hidden");
-      return true;
-    } else {
-      throw new Error(result.message || "Xatolik yuz berdi");
-    }
-  } catch (err) {
-    formMessage.textContent = "Xatolik: " + err.message;
-    formMessage.classList.add("error");
-    formMessage.classList.remove("hidden");
-    return false;
-  }
-}
-
-// Prorab Form
-prorabForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const report = {
-    workDone: document.getElementById("prorabWorkDone").value,
-    expenses: document.getElementById("prorabExpenses").value,
-    expenseNote: document.getElementById("prorabExpenseNote").value,
-    attendance: document.getElementById("prorabAttendance").value
-  };
-
-  const success = await sendReport(report);
-  if (success) prorabForm.reset();
-});
-
-// Shafyor Form
-shafyorForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const report = {
-    vehicle: document.getElementById("shafyorVehicle").value,
-    mileage: document.getElementById("shafyorMileage").value,
-    trips: document.getElementById("shafyorTrips").value,
-    repairCost: document.getElementById("shafyorRepairCost").value
-  };
-
-  const success = await sendReport(report);
-  if (success) shafyorForm.reset();
-});
-
-// Ta'minotchi - yoqilg'i qatorini qo'shish
-if (addFuelBtn) {
-  addFuelBtn.addEventListener("click", () => {
-    const div = document.createElement("div");
-    div.className = "fuel-entry flex gap-2 mb-2";
-    div.innerHTML = `
-      <input type="text" placeholder="Texnika nomi" class="fuel-vehicle border p-2 rounded w-1/2" required>
-      <input type="number" placeholder="Litr" class="fuel-amount border p-2 rounded w-1/2" required>
-    `;
-    fuelEntriesContainer.appendChild(div);
-  });
-}
-
-// Ta'minotchi Form
-taminotchiForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const fuelEntries = [];
-  const entries = fuelEntriesContainer.querySelectorAll(".fuel-entry");
-  entries.forEach(entry => {
-    const vehicle = entry.querySelector(".fuel-vehicle").value;
-    const amount = entry.querySelector(".fuel-amount").value;
-    if (vehicle && amount) {
-      fuelEntries.push({ vehicle, amount });
+    try {
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+      const resData = await res.json();
+      alert(resData.message || "Mabla'g' yuborildi!");
+      rahbarForm.reset();
+    } catch (err) {
+      alert("Xatolik yuz berdi!");
     }
   });
+}
 
-  const report = {
-    foodExpense: document.getElementById("taminotchiFoodExpense").value,
-    fuelEntries: fuelEntries
-  };
-
-  const success = await sendReport(report);
-  if (success) {
-    taminotchiForm.reset();
-    fuelEntriesContainer.innerHTML = "";
-  }
-});
+// LOGOUT
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    currentUser = null;
+    appSection.classList.add("hidden");
+    loginSection.classList.remove("hidden");
+    loginForm.reset();
+  });
+}
